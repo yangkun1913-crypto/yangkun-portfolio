@@ -677,7 +677,7 @@ function renderGallery() {
     shimmer.className = 'shimmer';
 
     const img = document.createElement('img');
-    img.src = photo.url;
+    img.dataset.src = photo.url;
     img.alt = '';
     img.style.aspectRatio = `${photo.w} / ${photo.h}`;
     img.onload = () => item.classList.add('loaded');
@@ -689,10 +689,29 @@ function renderGallery() {
     item.appendChild(card);
     item.addEventListener('click', () => openLightbox(index));
     gallery.appendChild(item);
-
-    // 直接显示（去掉入场动画延迟，图片立即可见）
-    requestAnimationFrame(() => item.classList.add('visible'));
   });
+
+  // 分批加载：每批6张，间隔200ms，避免浏览器并发连接限制
+  const items = document.querySelectorAll('.gallery-item');
+  const BATCH = 6;
+  const DELAY = 200;
+
+  function loadAt(i) {
+    if (i >= items.length) return;
+    const img = items[i].querySelector('img');
+    if (img && img.dataset.src) {
+      img.src = img.dataset.src;
+      img.removeAttribute('data-src');
+      items[i].classList.add('visible');
+    }
+    if ((i + 1) % BATCH === 0) {
+      setTimeout(() => loadAt(i + 1), DELAY);
+    } else {
+      loadAt(i + 1);
+    }
+  }
+
+  loadAt(0);
 }
 
 // ── Filter ──
