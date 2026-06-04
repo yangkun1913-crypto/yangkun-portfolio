@@ -677,7 +677,7 @@ function renderGallery() {
     shimmer.className = 'shimmer';
 
     const img = document.createElement('img');
-    img.dataset.src = photo.url;
+    img.src = photo.url;
     img.alt = '';
     img.style.aspectRatio = `${photo.w} / ${photo.h}`;
     img.onload = () => item.classList.add('loaded');
@@ -689,28 +689,9 @@ function renderGallery() {
     item.appendChild(card);
     item.addEventListener('click', () => openLightbox(index));
     gallery.appendChild(item);
-  });
 
-  const items = document.querySelectorAll('.gallery-item');
-
-  // 渐进加载：先加载视口内，再逐批加载其余
-  function loadBatch(list, start, size) {
-    const end = Math.min(start + size, list.length);
-    for (let i = start; i < end; i++) {
-      const img = list[i].querySelector('img');
-      if (img && img.dataset.src) {
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-        list[i].classList.add('visible');
-      }
-    }
-    if (end < list.length) {
-      requestAnimationFrame(() => loadBatch(list, end, size));
-    }
-  }
-
-  requestAnimationFrame(() => {
-    loadBatch(items, 0, 12);
+    // 直接显示（去掉入场动画延迟，图片立即可见）
+    requestAnimationFrame(() => item.classList.add('visible'));
   });
 }
 
