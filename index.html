@@ -6,23 +6,41 @@
 <title>许洋堃 · 作品集</title>
 <style>
   :root {
-    --bg: #f2f0eb;
-    --card: #fff;
-    --text: #5f584e;
-    --text-active: #1f1a14;
-    --border: #e8e3da;
-    --shadow: rgba(140, 130, 115, 0.06);
+    --bg: #f6f4ef;
+    --surface: #fffdf8;
+    --text: #6e675d;
+    --text-active: #15130f;
+    --muted: #a29a8e;
+    --border: #ded8cd;
+    --line: rgba(21, 19, 15, 0.14);
+    --scrim: rgba(10, 9, 7, 0.44);
+    --focus: #15130f;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  html { scroll-behavior: smooth; }
+
   body {
     background: var(--bg);
-    font-family: "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif;
-    font-weight: 300;
+    color: var(--text-active);
+    font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
     overflow-y: scroll;
     overflow-x: hidden;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  button:focus-visible,
+  .gallery-item:focus-visible {
+    outline: 1px solid var(--focus);
+    outline-offset: 5px;
   }
 
   /* ── Splash Page ── */
@@ -30,129 +48,162 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #10100d;
+    display: grid;
+    align-items: end;
     cursor: default;
     transition: opacity 0.6s ease, visibility 0.6s ease;
-    padding: 60px;
+    padding: clamp(28px, 5vw, 72px);
+    overflow: hidden;
+  }
+
+  .splash::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(8,7,5,0.76) 0%, rgba(8,7,5,0.46) 38%, rgba(8,7,5,0.12) 72%),
+                linear-gradient(180deg, rgba(8,7,5,0.1) 0%, rgba(8,7,5,0.28) 100%);
+    z-index: 1;
   }
 
   .splash.hide { opacity: 0; pointer-events: none; visibility: hidden; }
 
-  .splash-inner {
-    display: flex;
-    align-items: center;
-    gap: 80px;
-    max-width: 1000px;
-    width: 100%;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: splashReveal 0.9s 0.15s forwards ease;
-  }
-
   .splash-photo {
-    flex-shrink: 0;
-    width: 360px;
-    height: 360px;
-    border-radius: 4px;
-    overflow: hidden;
+    position: absolute;
+    inset: 0;
   }
 
   .splash-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 38%;
     display: block;
   }
 
+  .splash-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 760px) minmax(180px, 1fr);
+    align-items: end;
+    gap: clamp(32px, 8vw, 120px);
+    max-width: 1480px;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: splashReveal 0.8s 0.12s forwards ease;
+  }
+
   .splash-text {
-    flex: 1;
     min-width: 0;
     text-align: left;
+    color: #fffaf0;
+  }
+
+  .splash-kicker {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,250,240,0.72);
+    margin-bottom: clamp(20px, 4vw, 44px);
   }
 
   .splash-name {
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: #000;
-    margin-bottom: 6px;
-    line-height: 1.2;
+    font-family: inherit;
+    font-size: clamp(56px, 10vw, 154px);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: #fffaf0;
+    line-height: 0.92;
+    margin-bottom: clamp(18px, 2.5vw, 34px);
   }
 
   .splash-title {
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    color: #666;
-    margin-bottom: 4px;
+    font-size: clamp(17px, 2vw, 28px);
+    font-weight: 300;
+    line-height: 1.45;
+    letter-spacing: 0.03em;
+    color: rgba(255,250,240,0.9);
+    max-width: 620px;
+    margin-bottom: clamp(22px, 4vw, 52px);
   }
 
-  .splash-meta {
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    color: #999;
-    margin-bottom: 32px;
+  .splash-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    max-width: 700px;
+    border-top: 1px solid rgba(255,250,240,0.28);
+    padding-top: 18px;
   }
 
-  .splash-services {
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    color: #555;
-    margin-bottom: 12px;
-  }
-
-  .splash-brands {
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    color: #888;
+  .splash-detail span {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: rgba(255,250,240,0.56);
     margin-bottom: 8px;
-    line-height: 1.6;
   }
 
-  .splash-contact {
+  .splash-detail strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: rgba(255,250,240,0.88);
+  }
+
+  .splash-side {
+    color: rgba(255,250,240,0.76);
+    justify-self: end;
+    max-width: 260px;
+    border-left: 1px solid rgba(255,250,240,0.24);
+    padding-left: 24px;
+  }
+
+  .splash-side p {
     font-size: 13px;
-    font-weight: 600;
+    line-height: 1.8;
     letter-spacing: 0.04em;
-    color: #333;
-    margin-bottom: 40px;
+    margin-bottom: 28px;
   }
 
   .splash-enter {
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    color: #333;
-    padding: 0;
-    border: none;
-    border-bottom: 1px solid #333;
+    min-height: 44px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: #fffaf0;
+    padding: 0 0 3px;
+    border: 0;
+    border-bottom: 1px solid rgba(255,250,240,0.76);
     border-radius: 0;
     background: none;
     cursor: pointer;
-    font-family: inherit;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease, border-color 0.25s ease;
   }
 
-  .splash-enter:hover { opacity: 0.5; }
+  .splash-enter:hover { opacity: 0.68; border-color: rgba(255,250,240,0.42); }
 
   @keyframes splashReveal { to { opacity: 1; transform: translateY(0); } }
 
   /* ── Mobile Splash ── */
   @media (max-width: 767px) {
-    .splash { padding: 32px 24px; align-items: flex-start; }
-    .splash-inner { flex-direction: column; gap: 32px; }
-    .splash-photo { width: 200px; height: 200px; }
-    .splash-name { font-size: 26px; }
-    .splash-title { font-size: 14px; }
-    .splash-meta { font-size: 12px; margin-bottom: 24px; }
-    .splash-services { font-size: 12px; }
-    .splash-brands { font-size: 11px; }
-    .splash-contact { font-size: 12px; margin-bottom: 28px; }
+    .splash { min-height: 100dvh; padding: 28px 22px 34px; }
+    .splash::before {
+      background: linear-gradient(180deg, rgba(8,7,5,0.18) 0%, rgba(8,7,5,0.82) 72%, rgba(8,7,5,0.9) 100%);
+    }
+    .splash-photo img { object-position: center top; }
+    .splash-inner { grid-template-columns: 1fr; gap: 28px; }
+    .splash-kicker { font-size: 10px; margin-bottom: 22px; }
+    .splash-name { font-size: clamp(48px, 18vw, 76px); }
+    .splash-title { font-size: 16px; max-width: 330px; }
+    .splash-details { grid-template-columns: 1fr; gap: 14px; padding-top: 16px; }
+    .splash-side { justify-self: start; border-left: 0; padding-left: 0; max-width: 330px; }
+    .splash-side p { margin-bottom: 18px; }
   }
 
   /* ── Category Filter ── */
@@ -163,142 +214,163 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 48px;
-    padding: 36px 24px 12px;
-    background: linear-gradient(180deg, rgba(242,240,235,0.97) 0%, rgba(242,240,235,0.85) 60%, transparent 100%);
+    gap: clamp(18px, 4vw, 52px);
+    padding: 26px clamp(18px, 4vw, 52px) 18px;
+    background: rgba(246,244,239,0.9);
+    border-bottom: 1px solid rgba(21,19,15,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
   }
 
   /* ── Intro Return Button ── */
   .intro-return {
     position: absolute;
-    left: 28px;
+    left: clamp(16px, 3vw, 38px);
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
-    font-family: inherit;
-    opacity: 0.55;
-    transition: opacity 0.35s ease;
+    padding: 6px;
+    opacity: 0.72;
+    transition: opacity 0.25s ease;
   }
 
   .intro-return:hover { opacity: 1; }
 
   .intro-avatar {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background-size: cover;
     background-position: center;
     flex-shrink: 0;
+    border: 1px solid rgba(21,19,15,0.16);
   }
 
   .intro-label {
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.08em;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     color: var(--text);
   }
 
   @media (max-width: 767px) {
-    .filter { gap: 28px; padding: 24px 16px 20px; }
-    .filter-btn { font-size: 13px; letter-spacing: 0.08em; }
+    .filter {
+      justify-content: flex-start;
+      gap: 18px;
+      padding: 18px 14px 14px 62px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter::-webkit-scrollbar { display: none; }
     .intro-return { left: 12px; }
-    .intro-avatar { width: 24px; height: 24px; }
+    .intro-avatar { width: 28px; height: 28px; }
     .intro-label { display: none; }
   }
 
   .filter-btn {
     background: none; border: none;
     color: var(--text);
-    font-size: 14px; font-weight: 300; letter-spacing: 0.12em;
-    cursor: pointer; padding: 6px 0;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.16em;
+    cursor: pointer; padding: 8px 0;
     position: relative;
-    transition: color 0.5s ease;
-    font-family: inherit;
+    white-space: nowrap;
+    min-height: 44px;
+    transition: color 0.25s ease;
   }
 
   .filter-btn::after {
     content: ''; position: absolute; bottom: 0; left: 50%; width: 60%; height: 1px;
     background: var(--text-active);
     transform: translateX(-50%) scaleX(0);
-    transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: transform 0.25s ease;
   }
 
   .filter-btn:hover { color: var(--text-active); }
-  .filter-btn.active { color: var(--text-active); font-weight: 400; }
+  .filter-btn.active { color: var(--text-active); }
   .filter-btn.active::after { transform: translateX(-50%) scaleX(1); }
 
   @media (max-width: 767px) {
-    .filter { gap: 36px; padding: 24px 16px 20px; }
-    .filter-btn { font-size: 13px; letter-spacing: 0.08em; }
+    .filter-btn { font-size: 11px; letter-spacing: 0.12em; }
   }
 
   /* ── Sub Filter ── */
   .sub-filter {
-    position: fixed; top: 72px; left: 0; right: 0; z-index: 100;
+    position: fixed; top: 70px; left: 0; right: 0; z-index: 100;
     display: flex; justify-content: center; gap: 40px;
-    padding: 4px 24px 8px;
+    padding: 12px 24px 10px;
     opacity: 0; pointer-events: none;
-    transition: opacity 0.35s ease;
+    background: rgba(246,244,239,0.82);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    transition: opacity 0.25s ease;
   }
 
   .sub-filter.active { opacity: 1; pointer-events: auto; }
 
   .sub-filter-btn {
     background: none; border: none;
-    color: var(--text); font-size: 12px; font-weight: 300; letter-spacing: 0.1em;
-    cursor: pointer; padding: 3px 0;
-    transition: color 0.4s ease, opacity 0.4s ease;
-    font-family: inherit; opacity: 0.6;
+    color: var(--text); font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+    cursor: pointer; padding: 8px 0;
+    min-height: 36px;
+    transition: color 0.25s ease, opacity 0.25s ease;
+    opacity: 0.62;
   }
 
   .sub-filter-btn:hover,
   .sub-filter-btn.active { opacity: 1; color: var(--text-active); }
 
   @media (max-width: 767px) {
-    .sub-filter { top: 60px; gap: 28px; }
+    .sub-filter {
+      top: 61px;
+      justify-content: flex-start;
+      gap: 22px;
+      padding: 8px 14px 8px 62px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .sub-filter::-webkit-scrollbar { display: none; }
     .sub-filter-btn { font-size: 11px; }
   }
 
   /* ── Gallery: Pinterest 风格瀑布流 ── */
   .gallery {
     column-count: 2;
-    column-gap: 8px;
-    padding: 130px 8px 20px;
-    max-width: 2400px;
+    column-gap: 10px;
+    padding: 112px 10px 28px;
+    max-width: 1720px;
     margin: 0 auto;
     min-height: 100vh;
   }
 
   @media (min-width: 768px) {
-    .gallery { column-count: 3; column-gap: 10px; padding: 140px 10px 28px; }
+    .gallery { column-count: 3; column-gap: 14px; padding: 118px 16px 44px; }
   }
 
   @media (min-width: 1200px) {
-    .gallery { column-count: 5; column-gap: 12px; padding: 150px 14px 36px; }
+    .gallery { column-count: 4; column-gap: 18px; padding: 124px 24px 60px; }
   }
 
   @media (min-width: 1800px) {
-    .gallery { column-count: 6; column-gap: 14px; padding: 160px 18px 44px; }
+    .gallery { column-count: 5; column-gap: 20px; padding: 130px 28px 72px; }
   }
 
   /* ── Gallery Item ── */
   .gallery-item {
     break-inside: avoid;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     cursor: pointer;
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 1s ease, transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+    transform: translateY(18px);
+    transition: opacity 0.42s ease, transform 0.42s ease;
   }
 
-  @media (min-width: 768px) { .gallery-item { margin-bottom: 10px; } }
-  @media (min-width: 1200px) { .gallery-item { margin-bottom: 12px; } }
+  @media (min-width: 768px) { .gallery-item { margin-bottom: 14px; } }
+  @media (min-width: 1200px) { .gallery-item { margin-bottom: 18px; } }
 
   .gallery-item.hidden { display: none; }
   .gallery-item.visible { opacity: 1; transform: translateY(0); }
@@ -306,13 +378,9 @@
   .gallery-item .card {
     background: transparent;
     padding: 0;
-    border-radius: 8px;
+    border-radius: 2px;
     box-shadow: none;
-    transition: transform 0.4s ease, filter 0.4s ease;
-  }
-
-  @media (min-width: 768px) {
-    .gallery-item .card { border-radius: 10px; }
+    transition: transform 0.28s ease, filter 0.28s ease;
   }
 
   /* ── Hover 放大 ── */
@@ -322,37 +390,29 @@
   }
 
   .gallery-item:hover .card {
-    transform: scale(1.05);
-    filter: brightness(1.05);
+    transform: translateY(-3px);
+    filter: brightness(1.03) contrast(1.02);
   }
 
   .gallery-item .image-wrap {
     position: relative;
     overflow: hidden;
-    background: transparent;
-    border-radius: 8px;
+    background: #e8e2d8;
+    border-radius: 2px;
     line-height: 0;
-  }
-
-  @media (min-width: 768px) {
-    .gallery-item .image-wrap { border-radius: 10px; }
   }
 
   .gallery-item img {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 8px;
-  }
-
-  @media (min-width: 768px) {
-    .gallery-item img { border-radius: 10px; }
+    border-radius: 2px;
   }
 
   /* Shimmer */
   .gallery-item .shimmer {
     position: absolute; inset: 0;
-    background: linear-gradient(90deg, #e8e3da 25%, #ddd8cf 50%, #e8e3da 75%);
+    background: linear-gradient(90deg, #e4ded3 25%, #d8d1c5 50%, #e4ded3 75%);
     background-size: 200% 100%;
     animation: shimmer 1.8s infinite;
     z-index: 1;
@@ -369,12 +429,12 @@
   /* ── Lightbox ── */
   .lightbox {
     position: fixed; inset: 0; z-index: 1000;
-    background: rgba(242, 240, 235, 0.97);
+    background: rgba(16, 15, 12, 0.88);
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
-    transition: opacity 0.4s ease;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    transition: opacity 0.25s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .lightbox.active { opacity: 1; pointer-events: auto; }
@@ -385,25 +445,25 @@
     background: transparent;
     padding: 0;
     box-shadow: none;
-    transform: scale(0.93);
-    transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
+    transform: scale(0.98);
+    transition: transform 0.25s ease;
   }
 
   .lightbox.active .lightbox-image-wrapper { transform: scale(1); }
 
-  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; display: block; }
+  .lightbox img { max-width: 90vw; max-height: 88vh; object-fit: contain; display: block; }
 
   .lightbox-close {
     position: fixed; top: 28px; right: 32px;
     width: 48px; height: 48px;
     border: none; background: none;
     cursor: pointer; z-index: 1001;
-    opacity: 0.4; transition: opacity 0.35s ease;
+    opacity: 0.68; transition: opacity 0.25s ease;
   }
-  .lightbox-close:hover { opacity: 0.8; }
+  .lightbox-close:hover { opacity: 1; }
   .lightbox-close::before, .lightbox-close::after {
     content: ''; position: absolute; top: 50%; left: 50%;
-    width: 22px; height: 1px; background: var(--text-active);
+    width: 22px; height: 1px; background: #fffaf0;
   }
   .lightbox-close::before { transform: translate(-50%,-50%) rotate(45deg); }
   .lightbox-close::after  { transform: translate(-50%,-50%) rotate(-45deg); }
@@ -411,30 +471,32 @@
   .lightbox-nav {
     position: fixed; top: 50%; transform: translateY(-50%);
     width: 48px; height: 48px;
-    border: none; background: rgba(92,86,77,0.04);
+    border: 1px solid rgba(255,250,240,0.18);
+    background: rgba(255,250,240,0.06);
     cursor: pointer; z-index: 1001;
-    opacity: 0.35; transition: opacity 0.35s ease, background 0.35s ease;
+    opacity: 0.72; transition: opacity 0.25s ease, background 0.25s ease;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
   }
-  .lightbox-nav:hover { opacity: 0.8; background: rgba(92,86,77,0.08); }
+  .lightbox-nav:hover { opacity: 1; background: rgba(255,250,240,0.12); }
   .lightbox-nav.prev { left: 24px; }
   .lightbox-nav.next { right: 24px; }
   .lightbox-nav::before {
     content: ''; width: 10px; height: 10px;
-    border-left: 1.5px solid var(--text-active);
-    border-top: 1.5px solid var(--text-active);
+    border-left: 1.5px solid #fffaf0;
+    border-top: 1.5px solid #fffaf0;
   }
   .lightbox-nav.prev::before { transform: rotate(-45deg); margin-left: 3px; }
   .lightbox-nav.next::before { transform: rotate(135deg); margin-right: 3px; }
 
   .lightbox-counter {
     position: fixed; bottom: 36px; left: 50%; transform: translateX(-50%);
-    z-index: 1001; color: var(--text); font-size: 13px;
-    font-weight: 300; letter-spacing: 0.1em;
+    z-index: 1001; color: rgba(255,250,240,0.72); font-size: 12px;
+    font-weight: 400; letter-spacing: 0.14em;
   }
 
   @media (max-width: 767px) {
+    .gallery { padding-top: 92px; }
     .lightbox-image-wrapper { padding: 0; }
     .lightbox-nav { width: 36px; height: 36px; }
     .lightbox-nav.prev { left: 8px; }
@@ -446,29 +508,46 @@
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #ddd8cf; border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: #ccc5bb; }
+  ::-webkit-scrollbar-thumb { background: #cbc3b6; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #afa697; }
 
   .app { display: none; }
   .app.show { display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+    .gallery-item { transform: none; }
+    .gallery-item .shimmer { animation: none; }
+  }
 </style>
 </head>
 <body>
 
 <!-- Splash -->
 <div class="splash" id="splash">
+  <div class="splash-photo">
+    <img src="许洋堃.PNG" alt="许洋堃">
+  </div>
   <div class="splash-inner">
-    <div class="splash-photo">
-      <img src="作品集-web/avatar.jpg" alt="许洋堃">
-    </div>
     <div class="splash-text">
+      <div class="splash-kicker">Xu Yangkun Photography</div>
       <div class="splash-name">许洋堃</div>
-      <div class="splash-title">商业摄影师</div>
-      <div class="splash-meta">杭州  ·  从业 5 年</div>
-      <div class="splash-services">艺人拍摄  ·  人像拍摄  ·  静物拍摄</div>
-      <div class="splash-brands">合作品牌：babycare  ·  莫尔兔  ·  i baby  ·  全棉呼吸  ·  NCOSY</div>
-      <div class="splash-contact">微信：xuyangkun-</div>
-      <button class="splash-enter" id="splashEnter">进入作品集 →</button>
+      <div class="splash-title">商业摄影师，以克制的画面秩序完成艺人、人像与静物影像。</div>
+      <div class="splash-details">
+        <div class="splash-detail"><span>BASE</span><strong>杭州 · 从业 5 年</strong></div>
+        <div class="splash-detail"><span>SERVICE</span><strong>艺人拍摄 · 人像拍摄 · 静物拍摄</strong></div>
+        <div class="splash-detail"><span>CONTACT</span><strong>微信：xuyangkun-</strong></div>
+      </div>
+    </div>
+    <div class="splash-side">
+      <p>合作品牌：babycare、莫尔兔、i baby、全棉呼吸、NCOSY</p>
+      <button class="splash-enter" id="splashEnter">进入作品集</button>
     </div>
   </div>
 </div>
@@ -477,7 +556,7 @@
 <div class="app" id="app">
 
   <nav class="filter" id="filter">
-    <button class="intro-return" id="introReturn" title="关于许洋堃">
+    <button class="intro-return" id="introReturn" title="关于许洋堃" aria-label="返回关于许洋堃">
       <span class="intro-avatar" style="background-image:url('作品集-web/avatar.jpg')"></span>
       <span class="intro-label">关于</span>
     </button>
@@ -489,14 +568,16 @@
 
   <nav class="sub-filter" id="subFilter"></nav>
 
-  <div class="gallery" id="gallery"></div>
+  <main>
+    <div class="gallery" id="gallery" aria-label="摄影作品集"></div>
+  </main>
 
   <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightboxClose"></button>
-    <button class="lightbox-nav prev" id="lightboxPrev"></button>
-    <button class="lightbox-nav next" id="lightboxNext"></button>
-    <span class="lightbox-counter" id="lightboxCounter"></span>
+  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="作品预览">
+    <button class="lightbox-close" id="lightboxClose" aria-label="关闭预览"></button>
+    <button class="lightbox-nav prev" id="lightboxPrev" aria-label="上一张"></button>
+    <button class="lightbox-nav next" id="lightboxNext" aria-label="下一张"></button>
+    <span class="lightbox-counter" id="lightboxCounter" aria-live="polite"></span>
     <div class="lightbox-image-wrapper">
       <img id="lightboxImage" src="" alt="">
     </div>
@@ -676,6 +757,17 @@ const photos = [
 let currentCategory = 'all';
 let currentFolder = 'all';
 let filteredPhotos = [...photos];
+const categoryLabels = {
+  artist: '艺人拍摄',
+  portrait: '人像拍摄',
+  still: '静物拍摄'
+};
+
+function getPhotoLabel(photo, index) {
+  const category = categoryLabels[photo.category] || '摄影作品';
+  const folder = photo.folder ? `${photo.folder} · ` : '';
+  return `${folder}${category}作品 ${index + 1}`;
+}
 
 // ── Build Gallery ──
 const gallery = document.getElementById('gallery');
@@ -686,6 +778,9 @@ function renderGallery() {
   filteredPhotos.forEach((photo, index) => {
     const item = document.createElement('div');
     item.className = 'gallery-item';
+    item.setAttribute('role', 'button');
+    item.setAttribute('tabindex', '0');
+    item.setAttribute('aria-label', `打开${getPhotoLabel(photo, index)}`);
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -698,7 +793,7 @@ function renderGallery() {
 
     const img = document.createElement('img');
     img.dataset.src = photo.url;
-    img.alt = '';
+    img.alt = getPhotoLabel(photo, index);
     img.style.aspectRatio = `${photo.w} / ${photo.h}`;
     img.onload = () => item.classList.add('loaded');
     img.onerror = () => item.classList.add('loaded');
@@ -708,6 +803,12 @@ function renderGallery() {
     card.appendChild(imageWrap);
     item.appendChild(card);
     item.addEventListener('click', () => openLightbox(index));
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(index);
+      }
+    });
     gallery.appendChild(item);
   });
 
@@ -756,9 +857,14 @@ function buildSubFilter(cat) {
   allBtn.className = 'sub-filter-btn active';
   allBtn.dataset.folder = 'all';
   allBtn.textContent = '全部';
+  allBtn.setAttribute('aria-pressed', 'true');
   allBtn.addEventListener('click', () => {
-    document.querySelectorAll('.sub-filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.sub-filter-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     allBtn.classList.add('active');
+    allBtn.setAttribute('aria-pressed', 'true');
     currentFolder = 'all';
     applyFilter();
   });
@@ -769,9 +875,14 @@ function buildSubFilter(cat) {
     btn.className = 'sub-filter-btn';
     btn.dataset.folder = f;
     btn.textContent = f;
+    btn.setAttribute('aria-pressed', 'false');
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.sub-filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sub-filter-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       currentFolder = f;
       applyFilter();
     });
@@ -795,9 +906,14 @@ function applyFilter() {
 }
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
     currentCategory = btn.dataset.category;
     currentFolder = 'all';
     buildSubFilter(currentCategory);
@@ -822,6 +938,7 @@ function updateCounter() { lightboxCounter.textContent = `${currentIndex + 1} / 
 function openLightbox(index) {
   currentIndex = index;
   lightboxImage.src = filteredPhotos[index].url;
+  lightboxImage.alt = getPhotoLabel(filteredPhotos[index], currentIndex);
   updateCounter();
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -830,13 +947,17 @@ function openLightbox(index) {
 function closeLightbox() {
   lightbox.classList.remove('active');
   document.body.style.overflow = '';
-  setTimeout(() => { lightboxImage.src = ''; }, 500);
+  setTimeout(() => {
+    lightboxImage.src = '';
+    lightboxImage.alt = '';
+  }, 500);
 }
 
 function prevImage() {
   currentIndex = (currentIndex - 1 + filteredPhotos.length) % filteredPhotos.length;
   animateTransition(() => {
     lightboxImage.src = filteredPhotos[currentIndex].url;
+    lightboxImage.alt = getPhotoLabel(filteredPhotos[currentIndex], currentIndex);
     updateCounter();
   });
 }
@@ -845,6 +966,7 @@ function nextImage() {
   currentIndex = (currentIndex + 1) % filteredPhotos.length;
   animateTransition(() => {
     lightboxImage.src = filteredPhotos[currentIndex].url;
+    lightboxImage.alt = getPhotoLabel(filteredPhotos[currentIndex], currentIndex);
     updateCounter();
   });
 }
